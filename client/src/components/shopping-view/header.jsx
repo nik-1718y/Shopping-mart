@@ -1,4 +1,11 @@
-import { HousePlug, LogOut, Menu, ShoppingCart, ShoppingCartIcon, UserCog } from "lucide-react";
+import {
+  HousePlug,
+  LogOut,
+  Menu,
+  ShoppingCart,
+  ShoppingCartIcon,
+  UserCog,
+} from "lucide-react";
 import React, { useEffect, useState } from "react";
 import {
   Link,
@@ -22,7 +29,7 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import { Avatar } from "../ui/avatar";
 import { AvatarFallback } from "@radix-ui/react-avatar";
-import { logoutUser } from "@/store/auth-slice";
+import { logoutUser, resetTokenAndCredentials } from "@/store/auth-slice";
 import UserCartWrapper from "./cart-wrapper";
 import { fetchCartItems } from "@/store/shop/cart-slice";
 import { Label } from "../ui/label";
@@ -75,7 +82,10 @@ function HeaderRightContent() {
   const dispatch = useDispatch();
 
   function handleLogout() {
-    dispatch(logoutUser());
+    // dispatch(logoutUser());
+    dispatch(resetTokenAndCredentials());
+    sessionStorage.clear();
+    navigate("/auth/login");
   }
 
   useEffect(() => {
