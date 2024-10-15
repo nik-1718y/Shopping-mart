@@ -16,7 +16,7 @@ import CheckAuth from "./components/common/check-auth";
 import UnauthPage from "./pages/unauth-page";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { checkAuth } from "./store/auth-slice";
+import { checkAuth, resetTokenAndCredentials } from "./store/auth-slice";
 import { Skeleton } from "@/components/ui/skeleton";
 import AdminOrders from "./pages/admin-view/orders";
 import PaypalReturnPage from "./pages/shopping-view/paypal-return";
@@ -30,8 +30,15 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const token = JSON.stringify(sessionStorage.getItem('token'))
-    dispatch(checkAuth(token));
+    // const token = JSON.stringify(sessionStorage.getItem('token'))
+    // dispatch(checkAuth(token));
+    const token = JSON.parse(sessionStorage.getItem('token'));
+    if (token) {
+      dispatch(checkAuth(token));
+    } else {
+      // No token found, reset authentication state
+      dispatch(resetTokenAndCredentials());
+    }
   }, [dispatch]); 
 
   if (isLoading) return <Skeleton className="w-screen bg-black h-screen" />;
