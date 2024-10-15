@@ -30,16 +30,9 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // const token = JSON.stringify(sessionStorage.getItem('token'))
-    // dispatch(checkAuth(token));
-    const token = JSON.parse(sessionStorage.getItem('token'));
-    if (token) {
-      dispatch(checkAuth(token));
-    } else {
-      // No token found, reset authentication state
-      dispatch(resetTokenAndCredentials());
-    }
-  }, [dispatch]); 
+    const token = JSON.parse(sessionStorage.getItem("token"));
+    dispatch(checkAuth(token));
+  }, [dispatch]);
 
   if (isLoading) return <Skeleton className="w-screen bg-black h-screen" />;
 
