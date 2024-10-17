@@ -85,13 +85,15 @@ CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_secret
 ```
 5. **Run the Application:** In the backend folder, run:
-``` npm run dev ```
+```bash 
+npm run dev
+```
 
 In the frontend folder, run:
 
-```npm start```
-
-6. Open your browser and navigate to http://localhost:3000.
+```bash 
+npm run dev
+```
 
 ## Usage
 - **User Flow:**
