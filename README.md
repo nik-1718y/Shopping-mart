@@ -55,7 +55,7 @@ ShopSmart is a full-stack e-commerce platform built using the MERN stack, design
 ### **Steps:**
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/your-username/ShopSmart-Ecommerce-MERN.git
+   git clone https://github.com/Amar-Gupta-721/ShopSmart-Ecommerce-MERN.git
    cd ShopSmart-Ecommerce-MERN
     ```
 2. **Install Dependencies:** For both frontend and backend:    
@@ -63,9 +63,16 @@ ShopSmart is a full-stack e-commerce platform built using the MERN stack, design
      cd frontend
     npm install
     cd ../backend
-    npm install 
+    npm install
 
-3. **Setup Environment Variables:** 
+3. **Setup Environment Variables for Frontend:** 
+Create a ```.env``` file in the backend directory and add the following:
+
+```bash 
+VITE_API_URL=http://localhost:5000
+```
+
+4. **Setup Environment Variables for Backend:** 
 Create a ```.env``` file in the backend directory and add the following:
 
 ```bash 
@@ -77,14 +84,14 @@ CLOUDINARY_CLOUD_NAME=your_cloudinary_name
 CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_secret
 ```
-4. **Run the Application:** In the backend folder, run:
+5. **Run the Application:** In the backend folder, run:
 ``` npm run dev ```
 
 In the frontend folder, run:
 
 ```npm start```
 
-5. Open your browser and navigate to http://localhost:3000.
+6. Open your browser and navigate to http://localhost:3000.
 
 ## Usage
 - **User Flow:**
