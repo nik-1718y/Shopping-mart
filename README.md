@@ -1,5 +1,5 @@
 
-# **ShopSmart - A Full-Stack E-Commerce Website (MERN)**
+# **ShopSmart-Ecommerce-MERN**
 
 ### **Overview**
 ShopSmart is a full-stack e-commerce platform built using the MERN stack, designed for both users and admins. It provides features like secure authentication, product management, order handling, and virtual payments with PayPal. Cloudinary integration is used for media storage and optimization.
