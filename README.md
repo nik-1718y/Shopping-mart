@@ -60,9 +60,9 @@ ShopSmart is a full-stack e-commerce platform built using the MERN stack, design
     ```
 2. **Install Dependencies:** For both frontend and backend:    
      ```bash
-     cd frontend
+     cd client
     npm install
-    cd ../backend
+    cd ../server
     npm install
 
 3. **Setup Environment Variables for Frontend:** 
