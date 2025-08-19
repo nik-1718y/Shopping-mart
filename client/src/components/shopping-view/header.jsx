@@ -34,7 +34,7 @@ import UserCartWrapper from "./cart-wrapper";
 import { fetchCartItems } from "@/store/shop/cart-slice";
 import { Label } from "../ui/label";
 
-function MenuItems() {
+function MenuItems({ setIsSheetOpen }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -57,6 +57,9 @@ function MenuItems() {
           new URLSearchParams(`?category=${getCurrentMenuItem.id}`)
         )
       : navigate(getCurrentMenuItem.path);
+
+    // 👇 Close the sheet if in mobile view
+    if (setIsSheetOpen) setIsSheetOpen(false);
   }
 
   return (
@@ -147,6 +150,7 @@ function HeaderRightContent() {
 
 const ShoppingHeader = () => {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const [isSheetOpen, setIsSheetOpen] = useState(false); // <-- control state
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
@@ -156,7 +160,8 @@ const ShoppingHeader = () => {
           <span className="font-bold">ShopSmart</span>
         </Link>
 
-        <Sheet>
+        {/* Mobile Menu */}
+        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon" className="lg:hidden">
               <Menu className="h-6 w-6" />
@@ -164,11 +169,13 @@ const ShoppingHeader = () => {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-full max-w-xs">
-            <MenuItems />
+            {/* Pass setIsSheetOpen to close menu on click */}
+            <MenuItems setIsSheetOpen={setIsSheetOpen} />
             <HeaderRightContent />
           </SheetContent>
         </Sheet>
 
+        {/* Desktop Menu */}
         <div className="hidden lg:block">
           <MenuItems />
         </div>
