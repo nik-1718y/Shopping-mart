@@ -1,19 +1,45 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+// const initialState = {
+//     isLoading: false,
+//     productList: [],
+//     productDetails: null
+// }
+
+// export const fetchAllFilteredProducts = createAsyncThunk(
+//     '/products/fetchAllProducts',
+//     async ({ filterParams, sortParams }) => {
+//         const query = new URLSearchParams({
+//             ...filterParams,
+//             sortBy: sortParams
+//         })
+//         const result = await axios.get(
+//             `${import.meta.env.VITE_API_URL}/api/shop/products/get?${query}`
+//         );
+
+//         return result?.data;
+//     }
+// );
+
 const initialState = {
     isLoading: false,
     productList: [],
-    productDetails: null
-}
+    productDetails: null,
+    pagination: { page: 1, totalPages: 1 }
+};
+
 
 export const fetchAllFilteredProducts = createAsyncThunk(
     '/products/fetchAllProducts',
-    async ({ filterParams, sortParams }) => {
+    async ({ filterParams, sortParams, page = 1, limit = 8 }) => {
         const query = new URLSearchParams({
             ...filterParams,
-            sortBy: sortParams
-        })
+            sortBy: sortParams,
+            page,
+            limit
+        });
+
         const result = await axios.get(
             `${import.meta.env.VITE_API_URL}/api/shop/products/get?${query}`
         );
@@ -46,10 +72,16 @@ const shoppingProductSlice = createSlice({
         builder.addCase(fetchAllFilteredProducts.pending, (state) => {
             state.isLoading = true;
         })
+            // .addCase(fetchAllFilteredProducts.fulfilled, (state, action) => {
+            //     state.isLoading = false;
+            //     state.productList = action.payload.data;
+            // })
             .addCase(fetchAllFilteredProducts.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.productList = action.payload.data;
+                state.pagination = action.payload.pagination;
             })
+
             .addCase(fetchAllFilteredProducts.rejected, (state) => {
                 state.isLoading = false;
                 state.productList = [];

@@ -1,9 +1,54 @@
 const Product = require("../../models/Product")
 
+// const getFilteredProducts = async (req, res) => {
+//     try {
+
+//         const { category = [], brand = [], sortBy = "price-lowtohigh" } = req.query;
+
+//         let filters = {};
+//         if (category.length) {
+//             filters.category = { $in: category.split(',') }
+//         }
+//         if (brand.length) {
+//             filters.brand = { $in: brand.split(',') }
+//         }
+//         let sort = {}
+//         switch (sortBy) {
+//             case 'price-lowtohigh':
+//                 sort.price = 1;
+//                 break;
+//             case 'price-hightolow':
+//                 sort.price = -1;
+//                 break;
+//             case 'title-atoz':
+//                 sort.title = 1;
+//                 break;
+//             case 'title-ztoa':
+//                 sort.title = -1;
+//                 break;
+//             default:
+//                 sort.price = 1;
+//                 break;
+//         }
+//         const products = await Product.find(filters).sort(sort);
+
+//         res.status(200).json({
+//             success: true,
+//             data: products
+//         })
+
+//     } catch (error) {
+//         console.log(error)
+//         res.status(500).json({
+//             success: false,
+//             message: 'Some error occured'
+//         })
+//     }
+// }
+
 const getFilteredProducts = async (req, res) => {
     try {
-
-        const { category = [], brand = [], sortBy = "price-lowtohigh" } = req.query;
+        const { category = [], brand = [], sortBy = "price-lowtohigh", page = 1, limit = 10 } = req.query;
 
         let filters = {};
         if (category.length) {
@@ -12,7 +57,8 @@ const getFilteredProducts = async (req, res) => {
         if (brand.length) {
             filters.brand = { $in: brand.split(',') }
         }
-        let sort = {}
+
+        let sort = {};
         switch (sortBy) {
             case 'price-lowtohigh':
                 sort.price = 1;
@@ -30,21 +76,34 @@ const getFilteredProducts = async (req, res) => {
                 sort.price = 1;
                 break;
         }
-        const products = await Product.find(filters).sort(sort);
+
+        const skip = (page - 1) * limit;
+        const totalProducts = await Product.countDocuments(filters);
+
+        const products = await Product.find(filters)
+            .sort(sort)
+            .skip(skip)
+            .limit(Number(limit));
 
         res.status(200).json({
             success: true,
-            data: products
-        })
+            data: products,
+            pagination: {
+                total: totalProducts,
+                page: Number(page),
+                totalPages: Math.ceil(totalProducts / limit)
+            }
+        });
 
     } catch (error) {
-        console.log(error)
+        console.log(error);
         res.status(500).json({
             success: false,
             message: 'Some error occured'
-        })
+        });
     }
-}
+};
+
 
 const getProductDetails = async (req, res) => {
     try {

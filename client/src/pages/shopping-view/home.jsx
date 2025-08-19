@@ -45,15 +45,31 @@ const brandsWithIcon = [
 const ShoppingHome = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const dispatch = useDispatch();
-  const { productList, productDetails } = useSelector(
-    (state) => state.shopProducts
-  );
+  // const { productList, productDetails } = useSelector(
+  //   (state) => state.shopProducts
+  // );
   const { featureImageList } = useSelector((state) => state.commonFeature);
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
 
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  const [page, setPage] = useState(1);
+  const { productList, productDetails, pagination } = useSelector(
+    (state) => state.shopProducts
+  );
+
+  useEffect(() => {
+    dispatch(
+      fetchAllFilteredProducts({
+        filterParams: {},
+        sortParams: "price-lowtohigh",
+        page,
+        limit: 8,
+      })
+    );
+  }, [dispatch, page]);
 
   function handleNavigateToListingPage(getCurrentItem, section) {
     sessionStorage.removeItem("filters");
@@ -215,6 +231,37 @@ const ShoppingHome = () => {
                 ))
               : null}
           </div>
+
+          <div className="flex justify-center items-center mt-8 space-x-2">
+            <button
+              className="px-3 py-1 border rounded"
+              onClick={() => setPage(page - 1)}
+              disabled={page === 1}
+            >
+              Prev
+            </button>
+
+            {[...Array(pagination.totalPages)].map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setPage(i + 1)}
+                className={`px-3 py-1 border rounded ${
+                  page === i + 1 ? "bg-gray-300" : ""
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
+
+            <button
+              className="px-3 py-1 border rounded"
+              onClick={() => setPage(page + 1)}
+              disabled={page === pagination.totalPages}
+            >
+              Next
+            </button>
+          </div>
+          
         </div>
       </section>
       <ProductDetailsDialog

@@ -36,13 +36,22 @@ function createSeachParamsHelper(filterParams) {
 
 const ShoppingListing = () => {
   const dispatch = useDispatch();
-  const { productList, productDetails } = useSelector(
+  // const { productList, productDetails } = useSelector(
+  //   (state) => state.shopProducts
+  // );
+
+  const { productList, productDetails, pagination } = useSelector(
     (state) => state.shopProducts
   );
+
   const { cartItems } = useSelector((state) => state.shopCart);
   const { user } = useSelector((state) => state.auth);
+
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
+
+  const [page, setPage] = useState(1); // 👈 add page state
+
   const [searchParams, setSearchParams] = useSearchParams();
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const { toast } = useToast();
@@ -129,12 +138,25 @@ const ShoppingListing = () => {
     }
   }, [filters]);
 
+  // useEffect(() => {
+  //   if (filters !== null && sort !== null)
+  //     dispatch(
+  //       fetchAllFilteredProducts({ filterParams: filters, sortParams: sort })
+  //     );
+  // }, [dispatch, sort, filters]);
+
   useEffect(() => {
-    if (filters !== null && sort !== null)
+    if (filters !== null && sort !== null) {
       dispatch(
-        fetchAllFilteredProducts({ filterParams: filters, sortParams: sort })
+        fetchAllFilteredProducts({
+          filterParams: filters,
+          sortParams: sort,
+          page, // 👈 send current page
+          limit: 8, // 👈 how many products per page
+        })
       );
-  }, [dispatch, sort, filters]);
+    }
+  }, [dispatch, sort, filters, page]); // 👈 added page
 
   useEffect(() => {
     if (productDetails !== null) {
@@ -180,7 +202,7 @@ const ShoppingListing = () => {
             </DropdownMenu>
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+        {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
           {productList && productList.length > 0
             ? productList.map((productItem) => (
                 <ShoppingProductTile
@@ -190,7 +212,57 @@ const ShoppingListing = () => {
                 />
               ))
             : null}
+        </div> */}
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+          {productList && productList.length > 0 ? (
+            productList.map((productItem) => (
+              <ShoppingProductTile
+                handleGetProductDetails={handleGetProductDetails}
+                product={productItem}
+                handleAddToCart={handleAddToCart}
+              />
+            ))
+          ) : (
+            <p className="col-span-full text-center text-muted-foreground">
+              No products found
+            </p>
+          )}
         </div>
+
+        {/* 🔹 Pagination Controls */}
+        {pagination?.totalPages > 1 && (
+          <div className="flex justify-center items-center gap-2 p-4">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={page === 1}
+              onClick={() => setPage(page - 1)}
+            >
+              Prev
+            </Button>
+
+            {Array.from({ length: pagination.totalPages }, (_, i) => (
+              <Button
+                key={i + 1}
+                variant={page === i + 1 ? "default" : "outline"}
+                size="sm"
+                onClick={() => setPage(i + 1)}
+              >
+                {i + 1}
+              </Button>
+            ))}
+
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={page === pagination.totalPages}
+              onClick={() => setPage(page + 1)}
+            >
+              Next
+            </Button>
+          </div>
+        )}
       </div>
       <ProductDetailsDialog
         open={openDetailsDialog}
