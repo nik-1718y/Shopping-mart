@@ -136,6 +136,7 @@ const ShoppingHome = () => {
         {featureImageList && featureImageList.length > 0
           ? featureImageList.map((slide, index) => (
               <img
+                loading="lazy"
                 src={slide?.image}
                 key={index}
                 className={`${

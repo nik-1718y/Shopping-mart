@@ -9,6 +9,7 @@ const ShoppingAccount = () => {
     <div className="flex flex-col">
       <div className="relative h-[300px] w-full overflow-hidden">
         <img
+          loading="lazy"
           src={accImg}
           className="h-full w-full object-cover object-center"
         />

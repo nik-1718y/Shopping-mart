@@ -107,6 +107,7 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
       <DialogContent className="grid gap-8 p-4 sm:grid-cols-2 sm:p-8 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw] overflow-y-auto max-h-[90vh]">
         <div className="relative overflow-hidden rounded-lg">
           <img
+            loading="lazy"
             src={productDetails?.image}
             alt={productDetails?.title}
             className="w-full h-auto object-cover rounded-lg"

@@ -72,6 +72,7 @@ const AdminDashboard = () => {
           ? featureImageList.map((featureImgItem) => (
               <div className="relative">
                 <img
+                  loading="lazy"
                   src={featureImgItem?.image}
                   alt={featureImgItem?.title}
                   className="w-full h-[300px] object-cover rounded-t-lg"

@@ -14,6 +14,7 @@ const AdminProductTile = ({
       <div>
         <div className="relative">
           <img
+            loading="lazy"
             src={product?.image}
             alt={product?.title}
             className="w-full h-[300px] object-cover rounded-t-lg"
